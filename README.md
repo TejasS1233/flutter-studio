@@ -2,7 +2,7 @@
 
 A modern Flutter component library with an interactive theme customization website.
 
-## 📦 Projects
+##  Projects
 
 ### [`flutter_studio/`](flutter_studio/)
 
@@ -20,7 +20,7 @@ Interactive web application for customizing and previewing components. Users can
 
 **For deployment:** Deploy to your hosting platform to provide users with a theme generator.
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Publish the Library
 
@@ -44,7 +44,7 @@ flutter build web
 # Deploy the build/web/ directory to your hosting
 ```
 
-## 🎯 User Workflow
+##  User Workflow
 
 1. Install library: `flutter pub add flutter_studio`
 2. Visit your website to customize theme
