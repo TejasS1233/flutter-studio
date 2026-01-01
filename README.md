@@ -118,7 +118,7 @@ Complete documentation website built with VitePress, featuring detailed componen
 
 ## Links
 
-- **Documentation:** Coming soon
+- **Documentation:** [https://docs-flutterstudio.vercel.app](https://docs-flutterstudio.vercel.app)
 - **CLI Tool:** [pub.dev/packages/flutter_studio_cli](https://pub.dev/packages/flutter_studio_cli)
 - **Package:** [pub.dev/packages/flutter_studio](https://pub.dev/packages/flutter_studio)
 - **Live Demo:** [flutterstudio.vercel.app](https://flutterstudio.vercel.app)
