@@ -1,0 +1,100 @@
+/* Custom theme styles */
+:root {
+  --vp-c-brand-1: #0460c6;
+  --vp-c-brand-2: #0573e6;
+  --vp-c-brand-3: #0350a8;
+}
+
+/* Navbar logo sizing */
+.VPNavBarTitle .logo {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+/* Code block styling */
+.vp-doc [class*='language-'] {
+  border-radius: 8px;
+}
+
+/* Page header styling */
+.vp-doc h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.vp-doc .content-container > p:first-of-type {
+  font-size: 1.15rem;
+  color: var(--vp-c-text-2);
+  margin-bottom: 2rem;
+}
+
+/* Outline/TOC on the right */
+.VPDocAsideOutline {
+  padding-top: 2rem;
+}
+
+/* Component interactive demo container */
+.interactive-demo {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  background: var(--vp-c-bg-soft);
+  text-align: center;
+}
+
+/* Interactive playground button */
+.playground-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--vp-c-brand-1);
+  color: white !important;
+  border-radius: 8px;
+  text-decoration: none !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.playground-button:hover {
+  background: var(--vp-c-brand-2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  color: white !important;
+}
+
+/* Installation command styling */
+.installation-tabs {
+  margin: 1.5rem 0;
+}
+
+/* Props table styling */
+.props-table {
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+.props-table th {
+  text-align: left;
+  padding: 0.75rem;
+  background: var(--vp-c-bg-soft);
+  border-bottom: 2px solid var(--vp-c-divider);
+}
+
+.props-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.props-table code {
+  background: var(--vp-c-bg-mute);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}

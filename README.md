@@ -22,8 +22,8 @@ flutter_studio list                    # View all 40+ components
 
 **Why CLI-First?**
 
-| Feature             | CLI (Production)              | Package (Prototype)         |
-| ------------------- | ----------------------------- | --------------------------- |
+| Feature             | CLI (Production)           | Package (Prototype)      |
+| ------------------- | -------------------------- | ------------------------ |
 | **Code Ownership**  | Code lives in your project | External dependency      |
 | **Customization**   | Modify anything freely     | Limited to exposed props |
 | **Runtime Deps**    | Zero dependencies          | Package adds to bundle   |
@@ -103,8 +103,22 @@ Interactive web application for customizing and previewing components in real-ti
 
 > **Note:** The live demo is a static Flutter web build optimized for component preview functionality. The UI is currently non-responsive and best viewed on desktop. A fully responsive web experience is under development.
 
+### [`flutter_studio_docs/`](flutter_studio_docs/)
+
+Complete documentation website built with VitePress, featuring detailed component documentation, installation guides, and theming instructions.
+
+**Features:**
+
+- Comprehensive component documentation with API references
+- Getting started guides and installation instructions
+- CLI vs Package mode comparison
+- Theming and customization guides
+- Search functionality and responsive design
+
+
 ## Links
 
+- **Documentation:** Coming soon
 - **CLI Tool:** [pub.dev/packages/flutter_studio_cli](https://pub.dev/packages/flutter_studio_cli)
 - **Package:** [pub.dev/packages/flutter_studio](https://pub.dev/packages/flutter_studio)
 - **Live Demo:** [flutterstudio.vercel.app](https://flutterstudio.vercel.app)
