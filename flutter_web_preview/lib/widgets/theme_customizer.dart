@@ -56,6 +56,171 @@ class ThemeCustomizer extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
+        // Theme Presets Dropdown
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0460c6).withOpacity(0.05),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFF0460c6).withOpacity(0.2)),
+          ),
+          child: Row(
+            children: [
+              const Text(
+                'Theme: ',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF0460c6),
+                ),
+              ),
+              Expanded(
+                child: DropdownButton<String>(
+                  value: null,
+                  isExpanded: true,
+                  isDense: true,
+                  underline: const SizedBox(),
+                  icon: const Icon(Icons.arrow_drop_down, size: 18),
+                  style: const TextStyle(fontSize: 12, color: Colors.black87),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'default',
+                      child: Text('Default Theme'),
+                    ),
+                    DropdownMenuItem(value: 'netflix', child: Text('Netflix')),
+                    DropdownMenuItem(value: 'amazon', child: Text('Amazon')),
+                    DropdownMenuItem(
+                      value: 'flipkart',
+                      child: Text('Flipkart'),
+                    ),
+                    DropdownMenuItem(value: 'spotify', child: Text('Spotify')),
+                    DropdownMenuItem(value: 'youtube', child: Text('YouTube')),
+                    DropdownMenuItem(
+                      value: 'instagram',
+                      child: Text('Instagram'),
+                    ),
+                  ],
+                  onChanged: (String? value) {
+                    if (value != null) {
+                      GlobalTheme newTheme;
+                      switch (value) {
+                        case 'netflix':
+                          newTheme = GlobalTheme.netflix();
+                          break;
+                        case 'amazon':
+                          newTheme = GlobalTheme.amazon();
+                          break;
+                        case 'flipkart':
+                          newTheme = GlobalTheme.flipkart();
+                          break;
+                        case 'spotify':
+                          newTheme = GlobalTheme.spotify();
+                          break;
+                        case 'youtube':
+                          newTheme = GlobalTheme.youtube();
+                          break;
+                        case 'instagram':
+                          newTheme = GlobalTheme.instagram();
+                          break;
+                        default:
+                          newTheme = GlobalTheme();
+                      }
+                      appState.updateGlobalTheme(newTheme);
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        const Divider(),
+        const SizedBox(height: 8),
+        // Theme Preview Card
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: theme.background,
+            borderRadius: BorderRadius.circular(12 * theme.radiusScale),
+            border: Border.all(color: theme.border, width: 2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Theme Preview',
+                style: TextStyle(
+                  fontSize: 16 * theme.fontSizeScale,
+                  fontWeight: FontWeight.bold,
+                  color: theme.foreground,
+                  fontFamily: theme.fontFamily,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: theme.primary,
+                        borderRadius: BorderRadius.circular(
+                          8 * theme.radiusScale,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Primary',
+                          style: TextStyle(
+                            color: theme.primaryForeground,
+                            fontFamily: theme.fontFamily,
+                            fontSize: 14 * theme.fontSizeScale,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: theme.card,
+                        border: Border.all(color: theme.border),
+                        borderRadius: BorderRadius.circular(
+                          8 * theme.radiusScale,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Card',
+                          style: TextStyle(
+                            color: theme.cardForeground,
+                            fontFamily: theme.fontFamily,
+                            fontSize: 14 * theme.fontSizeScale,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Font: ${theme.fontFamily} • Radius: ${(theme.radiusScale * 100).toInt()}% • Size: ${(theme.fontSizeScale * 100).toInt()}%',
+                style: TextStyle(fontSize: 11, color: theme.mutedForeground),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        const Divider(),
+        const SizedBox(height: 8),
+        const Text(
+          'Customize Colors',
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
         _buildColorSection(context, appState, 'Primary Colors', [
           (
             'Primary',

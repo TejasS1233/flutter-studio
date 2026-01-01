@@ -5,7 +5,7 @@ export default defineConfig({
   description: 'Production-ready Flutter components that you own',
   
   themeConfig: {
-    logo: '/logo.png',
+    logo: '/logo-64x64.png',
     
     nav: [
       { text: 'Home', link: '/' },
@@ -120,11 +120,9 @@ export default defineConfig({
   },
 
   head: [
-    ['link', { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
-    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' }],
-    ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' }],
-    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' }],
-    ['link', { rel: 'manifest', href: '/site.webmanifest' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/logo-32x32.png' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/logo-32x32.png' }],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/logo-32x32.png' }],
     ['meta', { name: 'theme-color', content: '#0460c6' }],
     ['meta', { name: 'og:type', content: 'website' }],
     ['meta', { name: 'og:title', content: 'Flutter Studio' }],

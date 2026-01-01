@@ -18,10 +18,12 @@ class MyApp extends StatelessWidget {
       child: Consumer<AppState>(
         builder: (context, appState, _) {
           return MaterialApp(
-            title: 'Flutter UI Library Preview',
+            title: 'Flutter Studio',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF0460c6),
+              ),
               useMaterial3: true,
               fontFamily: appState.globalTheme.fontFamily,
               textTheme: TextTheme(

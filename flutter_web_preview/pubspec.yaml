@@ -44,6 +44,9 @@ dependencies:
   # Color picker for customization
   flutter_colorpicker: ^1.0.3
 
+  # Google Fonts for typography
+  google_fonts: ^6.2.1
+
   # Icons
   cupertino_icons: ^1.0.8
 
@@ -67,6 +70,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # Assets
+  assets:
+    - assets/logo-32x32.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

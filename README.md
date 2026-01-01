@@ -115,7 +115,6 @@ Complete documentation website built with VitePress, featuring detailed componen
 - Theming and customization guides
 - Search functionality and responsive design
 
-
 ## Links
 
 - **Documentation:** [https://docs-flutterstudio.vercel.app](https://docs-flutterstudio.vercel.app)

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:html' as html;
 import '../models/app_state.dart';
 import '../widgets/component_selector.dart';
 import '../widgets/mobile_phone_frame.dart';
@@ -62,23 +63,31 @@ class PreviewScreen extends StatelessWidget {
               child: Row(
                 children: [
                   // Logo/Branding
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.widgets_rounded,
-                      color: Colors.white,
-                      size: 20,
-                    ),
+                  Image.asset(
+                    'assets/logo-32x32.png',
+                    width: 32,
+                    height: 32,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF0460c6), Color(0xFF0573e6)],
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.widgets_rounded,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(width: 12),
                   const Text(
-                    'Flutter UI Library',
+                    'Flutter Studio',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -87,6 +96,147 @@ class PreviewScreen extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
+                  // Preset Selector
+                  Consumer<AppState>(
+                    builder: (context, appState, _) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF0460c6).withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: const Color(0xFF0460c6).withOpacity(0.2),
+                          ),
+                        ),
+                        child: DropdownButton<PresetType>(
+                          value: appState.currentPreset,
+                          underline: const SizedBox(),
+                          icon: const Icon(Icons.arrow_drop_down, size: 20),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF0460c6),
+                          ),
+                          items: const [
+                            DropdownMenuItem(
+                              value: PresetType.dashboard,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.dashboard,
+                                    size: 16,
+                                    color: Color(0xFF0460c6),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('Dashboard'),
+                                ],
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: PresetType.profile,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.person,
+                                    size: 16,
+                                    color: Color(0xFF0460c6),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('Profile'),
+                                ],
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: PresetType.feed,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.view_list,
+                                    size: 16,
+                                    color: Color(0xFF0460c6),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('Feed'),
+                                ],
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: PresetType.form,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.article,
+                                    size: 16,
+                                    color: Color(0xFF0460c6),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('Form'),
+                                ],
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: PresetType.settings,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.settings,
+                                    size: 16,
+                                    color: Color(0xFF0460c6),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('Settings'),
+                                ],
+                              ),
+                            ),
+                          ],
+                          onChanged: (PresetType? value) {
+                            if (value != null) {
+                              appState.loadPreset(value);
+                            }
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  // GitHub link
+                  IconButton(
+                    onPressed: () {
+                      html.window.open(
+                        'https://github.com/TejasS1233/flutter-studio',
+                        '_blank',
+                      );
+                    },
+                    icon: const Icon(Icons.code),
+                    tooltip: 'GitHub',
+                    iconSize: 20,
+                    color: Colors.grey.shade700,
+                  ),
+                  const SizedBox(width: 8),
+                  // Clear button
+                  Consumer<AppState>(
+                    builder: (context, appState, _) {
+                      if (appState.selectedComponents.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+                      return TextButton.icon(
+                        onPressed: () => appState.deselectAll(),
+                        icon: const Icon(Icons.clear, size: 16),
+                        label: const Text('Clear'),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.grey.shade700,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 8),
                   // Component count
                   Consumer<AppState>(
                     builder: (context, appState, _) {
@@ -97,12 +247,12 @@ class PreviewScreen extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: appState.selectedComponents.isNotEmpty
-                              ? const Color(0xFF667eea).withOpacity(0.1)
+                              ? const Color(0xFF0460c6).withOpacity(0.1)
                               : Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: appState.selectedComponents.isNotEmpty
-                                ? const Color(0xFF667eea).withOpacity(0.2)
+                                ? const Color(0xFF0460c6).withOpacity(0.2)
                                 : Colors.grey.shade200,
                           ),
                         ),
@@ -112,7 +262,7 @@ class PreviewScreen extends StatelessWidget {
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                             color: appState.selectedComponents.isNotEmpty
-                                ? const Color(0xFF667eea)
+                                ? const Color(0xFF0460c6)
                                 : Colors.grey.shade600,
                           ),
                         ),

@@ -18,7 +18,7 @@ class ZipBuilder {
       archive.addFile(_createFile('lib/theme/${entry.key}', entry.value));
     }
 
-    // 2. Example usage file
+
     final exampleCode = _generateExampleFile(components, theme);
     archive.addFile(_createFile('example/main.dart', exampleCode));
 
