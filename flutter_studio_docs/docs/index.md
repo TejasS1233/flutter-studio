@@ -24,7 +24,7 @@ features:
     details: No runtime dependencies. Only copy what you need, nothing more.
 
   - title: Theme-Aware
-    details: Automatically adapts to your app's theme including dark mode support.
+    details: Components respect your app's theme colors, typography, and styling.
 
   - title: CLI-First Approach
     details: Use our CLI to copy components directly into your project with full customization.
@@ -70,7 +70,6 @@ import 'package:flutter_studio/flutter_studio.dart';
 | **Code Ownership**  | Code lives in your project | External dependency      |
 | **Customization**   | Modify anything freely     | Limited to exposed props |
 | **Runtime Deps**    | Zero dependencies          | Package adds to bundle   |
-| **Dark Mode**       | Uses your Theme            | Static colors            |
 | **Version Control** | Track component changes    | Package version only     |
 | **Bundle Size**     | Only what you use          | Entire package           |
 

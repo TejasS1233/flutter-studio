@@ -44,3 +44,4 @@ export 'src/theme/typography.dart';
 export 'src/theme/radius.dart';
 export 'src/theme/spacing.dart';
 export 'src/theme/shadows.dart';
+export 'src/theme/effects.dart';

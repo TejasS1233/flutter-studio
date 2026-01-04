@@ -91,31 +91,35 @@ CustomButton(
 
 - CustomTable, CustomAccordion, CustomBottomSheet, CustomPopover, CustomFormField, CustomToggleGroup
 
-## Theming & Dark Mode
+## Theming
 
-All components support automatic **Dark Mode** via Flutter's `Theme.of(context)`:
+Components respect your app's theme configuration:
 
 ```dart
 MaterialApp(
-  theme: ThemeData.light(),
-  darkTheme: ThemeData.dark(),
-  themeMode: ThemeMode.system, // Automatic
-  // Components automatically adapt!
+  theme: ThemeData(
+    colorScheme: ColorScheme.light(
+      primary: Color(0xFF6366F1),
+      secondary: Color(0xFF8B5CF6),
+    ),
+  ),
+  home: MyHomePage(),
 )
 ```
 
 ### Custom Theme Colors
 
 ```dart
-// Components use Theme.of(context).colorScheme
+// Many components use Theme.of(context).colorScheme
 CustomButton(
   text: 'Primary Button',
-  // Automatically uses colorScheme.primary
+  backgroundColor: Theme.of(context).colorScheme.primary,
 )
 
 CustomTextField(
   label: 'Email',
-  // Automatically uses colorScheme.outline, surface, etc.
+  // Or override with custom colors
+  borderColor: Color(0xFF6366F1),
 )
 ```
 
@@ -132,7 +136,7 @@ class UIColors {
 }
 ```
 
-All theme files: `colors.dart`, `typography.dart`, `radius.dart`, `spacing.dart`, `shadows.dart`
+All theme files: `colors.dart`, `typography.dart`, `radius.dart`, `spacing.dart`, `shadows.dart`, `effects.dart`
 
 ## Accessibility
 

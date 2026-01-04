@@ -10,7 +10,6 @@ Traditional packages lock you into their implementation. The Flutter Studio CLI 
 | ------------------- | ------------------------- | ---------------------- |
 | **Code Ownership**  | ✅ Lives in your codebase | ❌ External dependency |
 | **Customization**   | ✅ Modify freely          | ⚠️ Limited to props    |
-| **Dark Mode**       | ✅ Uses Theme.of(context) | ⚠️ Static colors       |
 | **Bundle Size**     | ✅ Only what you add      | ⚠️ Full package        |
 | **Version Control** | ✅ Track changes          | ❌ Version only        |
 | **Type Safety**     | ✅ Full access            | ⚠️ API surface only    |
@@ -71,7 +70,7 @@ flutter_studio list
 
 - **Own Your Code**: Components live in your project. Customize them without constraints.
 - **Zero Runtime Dependencies**: No external packages in your dependency tree.
-- **Theme Integration**: Components use `Theme.of(context)` for automatic Dark Mode support.
+- **Theme Integration**: Components respect your app's theme configuration.
 - **Version Control**: Track every component change in your Git history.
 - **Bundle Optimization**: Only the components you use are in your build.
 - **Type Safety**: Full access to implementation details, not just public APIs.

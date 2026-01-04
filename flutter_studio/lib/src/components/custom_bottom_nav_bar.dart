@@ -97,13 +97,15 @@ class CustomBottomNavBar extends StatelessWidget {
       height: defaultHeight,
       decoration: BoxDecoration(
         color: defaultBgColor,
-        boxShadow: [
-          BoxShadow(
-            color: UIColors.gray900.withOpacity(0.1),
-            blurRadius: defaultElevation * 2,
-            offset: Offset(0, -defaultElevation / 2),
-          ),
-        ],
+        boxShadow: defaultElevation > 0
+            ? [
+                BoxShadow(
+                  color: UIColors.gray900.withOpacity(0.1),
+                  blurRadius: defaultElevation * 2,
+                  offset: Offset(0, -defaultElevation / 2),
+                ),
+              ]
+            : null,
       ),
       child: BottomNavigationBar(
         items: items.map((item) {

@@ -47,7 +47,7 @@ import 'package:flutter_studio/flutter_studio.dart';
 - **40+ Components** — Buttons, cards, forms, navigation, feedback, and more
 - **Accessible** — WCAG compliant with keyboard navigation
 - **Responsive** — Works beautifully on mobile, tablet, and desktop
-- **Dark Mode** — Full theme support out of the box
+- **Theme-Aware** — Respects your app's theme configuration
 - **Well Documented** — Clear examples and API references
 - **Type Safe** — Full Dart type safety with IDE support
 

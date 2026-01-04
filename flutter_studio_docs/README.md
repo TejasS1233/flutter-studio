@@ -10,7 +10,7 @@ Official documentation website for Flutter Studio component library, built with 
 - CLI vs Package mode comparison
 - Theming and customization documentation
 - Fast search functionality
-- Responsive design with dark mode support
+- Responsive design
 
 ## Development
 

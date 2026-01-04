@@ -241,52 +241,63 @@ class MobilePhoneFrame extends StatelessWidget {
               fontSizeFactor: theme.fontSizeScale,
             ),
           ),
-          child: DefaultTextStyle(
+            child: DefaultTextStyle(
             style: GoogleFonts.getFont(
               _getFontFamilyName(theme.fontFamily),
               color: theme.foreground,
               fontSize: 14 * theme.fontSizeScale,
             ),
-            child: Scaffold(
-              backgroundColor: theme.background,
-              appBar: appBar != null
-                  ? PreferredSize(
-                      preferredSize: const Size.fromHeight(56),
-                      child: appBar,
+            child: Container(
+              decoration: theme.enableGradients
+                  ? BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [theme.gradientStart, theme.gradientEnd],
+                      ),
                     )
                   : null,
-              body:
-                  appState.selectedComponents
-                      .where((c) => c.id != 'appbar' && c.id != 'bottomnav')
-                      .isEmpty
-                  ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: Text(
-                          appState.selectedComponents.isEmpty
-                              ? 'Select components from the left panel'
-                              : 'Add more components to see them here',
-                          style: const TextStyle(color: Colors.grey),
-                          textAlign: TextAlign.center,
+              child: Scaffold(
+                backgroundColor: theme.enableGradients ? Colors.transparent : theme.background,
+                appBar: appBar != null
+                    ? PreferredSize(
+                        preferredSize: const Size.fromHeight(56),
+                        child: appBar,
+                      )
+                    : null,
+                body:
+                    appState.selectedComponents
+                        .where((c) => c.id != 'appbar' && c.id != 'bottomnav')
+                        .isEmpty
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Text(
+                            appState.selectedComponents.isEmpty
+                                ? 'Select components from the left panel'
+                                : 'Add more components to see them here',
+                            style: const TextStyle(color: Colors.grey),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: _buildLayoutForPreset(
+                            appState.selectedComponents
+                                .where(
+                                  (c) => c.id != 'appbar' && c.id != 'bottomnav',
+                                )
+                                .toList(),
+                            theme,
+                            appState.currentPreset ?? PresetType.dashboard,
+                          ),
                         ),
                       ),
-                    )
-                  : SingleChildScrollView(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _buildLayoutForPreset(
-                          appState.selectedComponents
-                              .where(
-                                (c) => c.id != 'appbar' && c.id != 'bottomnav',
-                              )
-                              .toList(),
-                          theme,
-                          appState.currentPreset ?? PresetType.dashboard,
-                        ),
-                      ),
-                    ),
-              bottomNavigationBar: bottomNav,
+                bottomNavigationBar: bottomNav,
+              ),
             ),
           ),
         );
@@ -314,6 +325,145 @@ class MobilePhoneFrame extends StatelessWidget {
       case PresetType.settings:
         return _buildSettingsLayout(components, theme);
     }
+  }
+
+  Widget _buildStatCard(dynamic theme, String title, String value, String change, IconData icon, bool isPositive) {
+    // Safe access with defaults - old theme instances may not have these properties
+    double borderWidth = 1.0;
+    bool enableHardShadow = false;
+    double hardShadowOffsetX = 4.0;
+    double hardShadowOffsetY = 4.0;
+    
+    try { borderWidth = theme.borderWidth ?? 1.0; } catch (_) {}
+    try { enableHardShadow = theme.enableHardShadow ?? false; } catch (_) {}
+    try { hardShadowOffsetX = theme.hardShadowOffsetX ?? 4.0; } catch (_) {}
+    try { hardShadowOffsetY = theme.hardShadowOffsetY ?? 4.0; } catch (_) {}
+    
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.card,
+        borderRadius: BorderRadius.circular(12.0 * (theme.radiusScale as double)),
+        border: Border.all(
+          color: theme.border,
+          width: borderWidth,
+        ),
+        // Hard offset shadow for brutalism
+        boxShadow: enableHardShadow
+            ? [
+                BoxShadow(
+                  color: theme.border,
+                  offset: Offset(hardShadowOffsetX, hardShadowOffsetY),
+                  blurRadius: 0, // No blur - hard shadow
+                ),
+              ]
+            : null,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: theme.mutedForeground,
+                ),
+              ),
+              Icon(icon, size: 16, color: theme.mutedForeground),
+            ],
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: theme.foreground,
+            ),
+          ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                decoration: BoxDecoration(
+                  color: (isPositive ? Colors.green : Colors.red).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  change,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    color: isPositive ? Colors.green : Colors.red,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                'vs last week',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: theme.mutedForeground,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActivityItem(dynamic theme, String title, String subtitle, String amount, IconData icon, bool isIncome) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: theme.muted,
+              borderRadius: BorderRadius.circular(8.0 * (theme.radiusScale as double)),
+            ),
+            child: Icon(icon, size: 20, color: theme.foreground),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: theme.foreground,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.mutedForeground,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            amount,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: isIncome ? Colors.green : theme.foreground,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   List<Widget> _buildDashboardLayout(
@@ -407,40 +557,7 @@ class MobilePhoneFrame extends StatelessWidget {
       );
     }
 
-    // Search bar
-    if (textfields.isNotEmpty) {
-      layout.add(
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: textfields.first,
-        ),
-      );
-    }
-
-    // Filter chips
-    if (chips.isNotEmpty) {
-      layout.add(
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: chips
-                  .take(3)
-                  .map(
-                    (chip) => Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: chip,
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        ),
-      );
-    }
-
-    // Alerts section
+    // Notification card (using alert)
     if (alerts.isNotEmpty) {
       for (var alert in alerts) {
         layout.add(
@@ -454,56 +571,87 @@ class MobilePhoneFrame extends StatelessWidget {
       layout.add(
         Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: Text(
-            'Overview',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: theme.foreground,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Overview',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: theme.foreground,
+                ),
+              ),
+              Text(
+                'This week',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.mutedForeground,
+                ),
+              ),
+            ],
           ),
         ),
       );
 
+      // Realistic stats cards
       layout.add(
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           crossAxisCount: 2,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 1.3,
-          children: cards.take(4).toList(),
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 1.4,
+          children: [
+            _buildStatCard(theme, 'Total Revenue', '\$24,780', '+12.5%', Icons.trending_up, true),
+            _buildStatCard(theme, 'Active Users', '1,429', '+8.2%', Icons.people_outline, true),
+            _buildStatCard(theme, 'Orders', '356', '-3.1%', Icons.shopping_bag_outlined, false),
+            _buildStatCard(theme, 'Conversion', '4.3%', '+0.8%', Icons.auto_graph, true),
+          ],
         ),
       );
       layout.add(const SizedBox(height: 16));
     }
 
-    // Progress section
-    if (progress.isNotEmpty) {
-      layout.add(
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Text(
-            'Activity',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: theme.foreground,
+    // Recent Activity section
+    layout.add(
+      Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Recent Activity',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: theme.foreground,
+              ),
             ),
-          ),
+            Text(
+              'See all',
+              style: TextStyle(
+                fontSize: 12,
+                color: theme.primary,
+              ),
+            ),
+          ],
         ),
-      );
-      layout.add(
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: progress,
-          ),
-        ),
-      );
-    }
+      ),
+    );
+    
+    // Recent activity items
+    layout.add(
+      Column(
+        children: [
+          _buildActivityItem(theme, 'Payment Received', 'From John Doe', '+\$450.00', Icons.arrow_downward, true),
+          _buildActivityItem(theme, 'Subscription', 'Netflix Monthly', '-\$15.99', Icons.subscriptions_outlined, false),
+          _buildActivityItem(theme, 'Transfer', 'To Savings Account', '-\$200.00', Icons.swap_horiz, false),
+        ],
+      ),
+    );
+    layout.add(const SizedBox(height: 16));
 
     // Settings section with switches
     if (switches.isNotEmpty) {

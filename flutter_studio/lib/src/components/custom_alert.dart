@@ -13,6 +13,7 @@ class CustomAlert extends StatelessWidget {
   final Color? backgroundColor;
   final Color? foregroundColor;
   final Color? borderColor;
+  final double? borderRadius;
   final VoidCallback? onClose;
 
   const CustomAlert({
@@ -24,6 +25,7 @@ class CustomAlert extends StatelessWidget {
     this.backgroundColor,
     this.foregroundColor,
     this.borderColor,
+    this.borderRadius,
     this.onClose,
   });
 
@@ -72,7 +74,7 @@ class CustomAlert extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         border: Border.all(color: bColor, width: 1),
-        borderRadius: BorderRadius.circular(UIRadius.lg),
+        borderRadius: BorderRadius.circular(borderRadius ?? UIRadius.lg),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

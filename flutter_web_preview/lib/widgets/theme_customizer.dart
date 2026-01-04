@@ -13,7 +13,7 @@ class ThemeCustomizer extends StatelessWidget {
     return Consumer<AppState>(
       builder: (context, appState, _) {
         return DefaultTabController(
-          length: 3,
+          length: 4,
           child: Column(
             children: [
               Container(
@@ -27,10 +27,12 @@ class ThemeCustomizer extends StatelessWidget {
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.grey,
                   indicatorColor: Color(0xFF667eea),
+                  labelStyle: TextStyle(fontSize: 12),
                   tabs: [
                     Tab(text: 'Colors'),
                     Tab(text: 'Typography'),
                     Tab(text: 'Other'),
+                    Tab(text: 'Effects'),
                   ],
                 ),
               ),
@@ -40,6 +42,7 @@ class ThemeCustomizer extends StatelessWidget {
                     _buildColorsTab(context, appState),
                     _buildTypographyTab(context, appState),
                     _buildOtherTab(context, appState),
+                    _buildEffectsTab(context, appState),
                   ],
                 ),
               ),
@@ -47,6 +50,30 @@ class ThemeCustomizer extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  DropdownMenuItem<String> _buildThemeDropdownItem(String value, String label, List<Color> colors) {
+    return DropdownMenuItem(
+      value: value,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Color palette circles
+          ...colors.map((color) => Container(
+            width: 12,
+            height: 12,
+            margin: const EdgeInsets.only(right: 3),
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey.shade300, width: 0.5),
+            ),
+          )),
+          const SizedBox(width: 6),
+          Text(label, style: const TextStyle(fontSize: 12)),
+        ],
+      ),
     );
   }
 
@@ -67,7 +94,7 @@ class ThemeCustomizer extends StatelessWidget {
           child: Row(
             children: [
               const Text(
-                'Theme: ',
+                'Color Theme: ',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -82,28 +109,27 @@ class ThemeCustomizer extends StatelessWidget {
                   underline: const SizedBox(),
                   icon: const Icon(Icons.arrow_drop_down, size: 18),
                   style: const TextStyle(fontSize: 12, color: Colors.black87),
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'default',
-                      child: Text('Default Theme'),
-                    ),
-                    DropdownMenuItem(value: 'netflix', child: Text('Netflix')),
-                    DropdownMenuItem(value: 'amazon', child: Text('Amazon')),
-                    DropdownMenuItem(
-                      value: 'flipkart',
-                      child: Text('Flipkart'),
-                    ),
-                    DropdownMenuItem(value: 'spotify', child: Text('Spotify')),
-                    DropdownMenuItem(value: 'youtube', child: Text('YouTube')),
-                    DropdownMenuItem(
-                      value: 'instagram',
-                      child: Text('Instagram'),
-                    ),
+                  items: [
+                    _buildThemeDropdownItem('default', 'Default', const [Color(0xFF6366F1), Color(0xFFF4F4F5), Color(0xFF000000)]),
+                    _buildThemeDropdownItem('cyberpunk', 'Cyberpunk', const [Color(0xFF00FF41), Color(0xFFFF00FF), Color(0xFF0D0D0D)]),
+                    _buildThemeDropdownItem('netflix', 'Netflix', const [Color(0xFFE50914), Color(0xFF141414), Color(0xFF000000)]),
+                    _buildThemeDropdownItem('amazon', 'Amazon', const [Color(0xFFFF9900), Color(0xFF232F3E), Color(0xFFFFFFFF)]),
+                    _buildThemeDropdownItem('flipkart', 'Flipkart', const [Color(0xFF2874F0), Color(0xFFFFC107), Color(0xFFF1F3F6)]),
+                    _buildThemeDropdownItem('spotify', 'Spotify', const [Color(0xFF1DB954), Color(0xFF191414), Color(0xFF121212)]),
+                    _buildThemeDropdownItem('youtube', 'YouTube', const [Color(0xFFFF0000), Color(0xFF0F0F0F), Color(0xFF272727)]),
+                    _buildThemeDropdownItem('instagram', 'Instagram', const [Color(0xFFE4405F), Color(0xFF833AB4), Color(0xFFFAFAFA)]),
+                    _buildThemeDropdownItem('neobrutalism', 'Neo-Brutalism', const [Color(0xFFFFE600), Color(0xFFFF6B6B), Color(0xFF000000)]),
+                    _buildThemeDropdownItem('monochrome', 'Monochrome', const [Color(0xFF000000), Color(0xFFFFFFFF), Color(0xFF666666)]),
+                    _buildThemeDropdownItem('retrowindows', 'Retro Win95', const [Color(0xFF000080), Color(0xFFC0C0C0), Color(0xFF008080)]),
+                    _buildThemeDropdownItem('bento', 'Bento/iOS', const [Color(0xFF007AFF), Color(0xFFF2F2F7), Color(0xFF34C759)]),
                   ],
                   onChanged: (String? value) {
                     if (value != null) {
                       GlobalTheme newTheme;
                       switch (value) {
+                        case 'cyberpunk':
+                          newTheme = GlobalTheme.cyberpunk();
+                          break;
                         case 'netflix':
                           newTheme = GlobalTheme.netflix();
                           break;
@@ -121,6 +147,18 @@ class ThemeCustomizer extends StatelessWidget {
                           break;
                         case 'instagram':
                           newTheme = GlobalTheme.instagram();
+                          break;
+                        case 'neobrutalism':
+                          newTheme = GlobalTheme.neoBrutalism();
+                          break;
+                        case 'monochrome':
+                          newTheme = GlobalTheme.monochrome();
+                          break;
+                        case 'retrowindows':
+                          newTheme = GlobalTheme.retroWindows();
+                          break;
+                        case 'bento':
+                          newTheme = GlobalTheme.bento();
                           break;
                         default:
                           newTheme = GlobalTheme();
@@ -466,6 +504,10 @@ class ThemeCustomizer extends StatelessWidget {
               ),
               DropdownMenuItem(value: 'Ubuntu', child: Text('Ubuntu')),
               DropdownMenuItem(value: 'Nunito', child: Text('Nunito')),
+              // Fonts for new themes
+              DropdownMenuItem(value: 'Courier New', child: Text('Courier New')),
+              DropdownMenuItem(value: 'MS Sans Serif', child: Text('MS Sans Serif')),
+              DropdownMenuItem(value: 'SF Pro', child: Text('SF Pro')),
             ],
             onChanged: (value) {
               if (value != null) {
@@ -655,6 +697,436 @@ class ThemeCustomizer extends StatelessWidget {
             foregroundColor: Colors.grey.shade700,
             elevation: 0,
             padding: const EdgeInsets.symmetric(vertical: 12),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEffectsTab(BuildContext context, AppState appState) {
+    final theme = appState.globalTheme;
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        // Glassmorphism
+        Container(
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: theme.enableGlassmorphism 
+                ? const Color(0xFF667eea).withOpacity(0.1)
+                : Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: theme.enableGlassmorphism
+                  ? const Color(0xFF667eea).withOpacity(0.3)
+                  : Colors.grey.shade200,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.blur_on, size: 20, color: Color(0xFF667eea)),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'Glassmorphism',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Switch(
+                    value: theme.enableGlassmorphism,
+                    onChanged: (value) {
+                      appState.updateGlobalTheme(
+                        theme.copyWith(enableGlassmorphism: value),
+                      );
+                    },
+                    activeColor: const Color(0xFF667eea),
+                  ),
+                ],
+              ),
+              if (theme.enableGlassmorphism) ...[
+                const SizedBox(height: 12),
+                _buildSliderRow(
+                  'Blur',
+                  theme.glassBlur,
+                  1.0,
+                  30.0,
+                  (v) => appState.updateGlobalTheme(theme.copyWith(glassBlur: v)),
+                ),
+                const SizedBox(height: 8),
+                _buildSliderRow(
+                  'Opacity',
+                  theme.glassOpacity,
+                  0.05,
+                  0.5,
+                  (v) => appState.updateGlobalTheme(theme.copyWith(glassOpacity: v)),
+                ),
+              ],
+            ],
+          ),
+        ),
+
+        // Neumorphism
+        Container(
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: theme.enableNeumorphism 
+                ? const Color(0xFF667eea).withOpacity(0.1)
+                : Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: theme.enableNeumorphism
+                  ? const Color(0xFF667eea).withOpacity(0.3)
+                  : Colors.grey.shade200,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.layers, size: 20, color: Color(0xFF667eea)),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'Neumorphism',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Switch(
+                    value: theme.enableNeumorphism,
+                    onChanged: (value) {
+                      appState.updateGlobalTheme(
+                        theme.copyWith(enableNeumorphism: value),
+                      );
+                    },
+                    activeColor: const Color(0xFF667eea),
+                  ),
+                ],
+              ),
+              if (theme.enableNeumorphism) ...[
+                const SizedBox(height: 12),
+                _buildSliderRow(
+                  'Intensity',
+                  theme.neumorphismIntensity,
+                  0.1,
+                  1.0,
+                  (v) => appState.updateGlobalTheme(theme.copyWith(neumorphismIntensity: v)),
+                ),
+              ],
+            ],
+          ),
+        ),
+
+        // Gradients
+        Container(
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: theme.enableGradients 
+                ? const Color(0xFF667eea).withOpacity(0.1)
+                : Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: theme.enableGradients
+                  ? const Color(0xFF667eea).withOpacity(0.3)
+                  : Colors.grey.shade200,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.gradient, size: 20, color: Color(0xFF667eea)),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'Gradient Backgrounds',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Switch(
+                    value: theme.enableGradients,
+                    onChanged: (value) {
+                      appState.updateGlobalTheme(
+                        theme.copyWith(enableGradients: value),
+                      );
+                    },
+                    activeColor: const Color(0xFF667eea),
+                  ),
+                ],
+              ),
+              if (theme.enableGradients) ...[
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _showColorPicker(
+                          context, 'Gradient Start', theme.gradientStart,
+                          (c) => appState.updateGlobalTheme(theme.copyWith(gradientStart: c)),
+                        ),
+                        child: Container(
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: theme.gradientStart,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Start',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: theme.gradientStart.computeLuminance() > 0.5
+                                    ? Colors.black
+                                    : Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _showColorPicker(
+                          context, 'Gradient End', theme.gradientEnd,
+                          (c) => appState.updateGlobalTheme(theme.copyWith(gradientEnd: c)),
+                        ),
+                        child: Container(
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: theme.gradientEnd,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'End',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: theme.gradientEnd.computeLuminance() > 0.5
+                                    ? Colors.black
+                                    : Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                _buildSliderRow(
+                  'Angle',
+                  theme.gradientAngle,
+                  0.0,
+                  360.0,
+                  (v) => appState.updateGlobalTheme(theme.copyWith(gradientAngle: v)),
+                  suffix: '°',
+                ),
+              ],
+            ],
+          ),
+        ),
+
+        // Border Glow
+        Container(
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: theme.enableBorderGlow 
+                ? const Color(0xFF667eea).withOpacity(0.1)
+                : Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: theme.enableBorderGlow
+                  ? const Color(0xFF667eea).withOpacity(0.3)
+                  : Colors.grey.shade200,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.flare, size: 20, color: Color(0xFF667eea)),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'Border Glow',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Switch(
+                    value: theme.enableBorderGlow,
+                    onChanged: (value) {
+                      appState.updateGlobalTheme(
+                        theme.copyWith(enableBorderGlow: value),
+                      );
+                    },
+                    activeColor: const Color(0xFF667eea),
+                  ),
+                ],
+              ),
+              if (theme.enableBorderGlow) ...[
+                const SizedBox(height: 12),
+                GestureDetector(
+                  onTap: () => _showColorPicker(
+                    context, 'Glow Color', theme.glowColor,
+                    (c) => appState.updateGlobalTheme(theme.copyWith(glowColor: c)),
+                  ),
+                  child: Container(
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: theme.glowColor,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Glow Color',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: theme.glowColor.computeLuminance() > 0.5
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                _buildSliderRow(
+                  'Intensity',
+                  theme.glowIntensity,
+                  0.1,
+                  1.0,
+                  (v) => appState.updateGlobalTheme(theme.copyWith(glowIntensity: v)),
+                ),
+                const SizedBox(height: 8),
+                _buildSliderRow(
+                  'Spread',
+                  theme.glowSpread,
+                  1.0,
+                  20.0,
+                  (v) => appState.updateGlobalTheme(theme.copyWith(glowSpread: v)),
+                ),
+              ],
+            ],
+          ),
+        ),
+
+        // Hover Animations
+        Container(
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: theme.enableHoverAnimations 
+                ? const Color(0xFF667eea).withOpacity(0.1)
+                : Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: theme.enableHoverAnimations
+                  ? const Color(0xFF667eea).withOpacity(0.3)
+                  : Colors.grey.shade200,
+            ),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.touch_app, size: 20, color: Color(0xFF667eea)),
+              const SizedBox(width: 8),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Hover Animations',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      'Scale effect on hover/tap',
+                      style: TextStyle(fontSize: 11, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              Switch(
+                value: theme.enableHoverAnimations,
+                onChanged: (value) {
+                  appState.updateGlobalTheme(
+                    theme.copyWith(enableHoverAnimations: value),
+                  );
+                },
+                activeColor: const Color(0xFF667eea),
+              ),
+            ],
+          ),
+        ),
+
+        // Reset Effects Button
+        ElevatedButton.icon(
+          onPressed: () {
+            appState.updateGlobalTheme(theme.copyWith(
+              enableGlassmorphism: false,
+              enableNeumorphism: false,
+              enableGradients: false,
+              enableBorderGlow: false,
+              enableHoverAnimations: false,
+            ));
+          },
+          icon: const Icon(Icons.refresh, size: 18),
+          label: const Text('Reset Effects'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey.shade100,
+            foregroundColor: Colors.grey.shade700,
+            elevation: 0,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSliderRow(
+    String label,
+    double value,
+    double min,
+    double max,
+    ValueChanged<double> onChanged, {
+    String? suffix,
+  }) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 60,
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+        ),
+        Expanded(
+          child: Slider(
+            value: value.clamp(min, max),
+            min: min,
+            max: max,
+            onChanged: onChanged,
+            activeColor: const Color(0xFF667eea),
+          ),
+        ),
+        SizedBox(
+          width: 40,
+          child: Text(
+            '${value.toInt()}${suffix ?? ''}',
+            style: const TextStyle(fontSize: 11, color: Colors.grey),
+            textAlign: TextAlign.right,
           ),
         ),
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_studio/flutter_studio.dart';
 import '../models/global_theme.dart';
+import '../widgets/visual_effects.dart';
 
 class ComponentConfig {
   final String id;
@@ -23,39 +24,61 @@ class ComponentConfig {
   Widget buildWidget({GlobalTheme? theme}) {
     final t = theme ?? GlobalTheme(); // Fallback to defaults
 
+    // Helper to wrap container-like widgets with visual effects
+    Widget wrapWithEffects(Widget child, {double? width, double? height, EdgeInsets? padding, double? borderRadius}) {
+      // Only glass, neum, glow apply to components - gradients are app-level
+      final hasEffects = t.enableGlassmorphism || t.enableNeumorphism || t.enableBorderGlow;
+      if (!hasEffects) return child;
+      
+      return EffectContainer(
+        theme: t,
+        backgroundColor: Colors.transparent, // Don't add extra background
+        borderRadius: BorderRadius.circular((borderRadius ?? 12.0) * t.radiusScale),
+        padding: padding,
+        child: SizedBox(
+          width: width != null ? width - (padding?.horizontal ?? 0) : null,
+          height: height != null ? height - (padding?.vertical ?? 0) : null,
+          child: child,
+        ),
+      );
+    }
+
     switch (id) {
       case 'button':
-        return CustomButton(
-          text: properties['text'] ?? 'Click Me',
-          variant: _getButtonVariant(properties['variant']),
-          size: _getButtonSize(properties['size']),
-          backgroundColor: properties['backgroundColor'] ?? t.primary,
-          textColor: properties['textColor'] ?? t.primaryForeground,
-          borderColor: properties['borderColor'] ?? t.border,
-          borderRadius:
-              (properties['borderRadius']?.toDouble() ?? 8.0) * t.radiusScale,
-          elevation:
-              (properties['elevation']?.toDouble() ?? 2.0) * t.shadowIntensity,
-          fullWidth: properties['fullWidth'] ?? false,
-          fontSize:
-              (properties['fontSize']?.toDouble() ?? 16.0) * t.fontSizeScale,
-          icon: properties['icon'] != 'none'
-              ? _getIcon(properties['icon'])
-              : null,
-          onPressed: () {},
+        return wrapWithEffects(
+          CustomButton(
+            text: properties['text'] ?? 'Click Me',
+            variant: _getButtonVariant(properties['variant']),
+            size: _getButtonSize(properties['size']),
+            backgroundColor: properties['backgroundColor'] ?? t.primary,
+            textColor: properties['textColor'] ?? t.primaryForeground,
+            borderColor: properties['borderColor'] ?? t.border,
+            borderRadius:
+                (properties['borderRadius']?.toDouble() ?? 8.0) * t.radiusScale,
+            elevation:
+                (properties['elevation']?.toDouble() ?? 2.0) * t.shadowIntensity,
+            fullWidth: properties['fullWidth'] ?? false,
+            fontSize:
+                (properties['fontSize']?.toDouble() ?? 16.0) * t.fontSizeScale,
+            icon: properties['icon'] != 'none'
+                ? _getIcon(properties['icon'])
+                : null,
+            onPressed: () {},
+          ),
+          borderRadius: 8.0,
         );
 
       case 'card':
-        return CustomCard(
+        final cardWidget = CustomCard(
           variant: _getCardVariant(properties['variant']),
-          backgroundColor: properties['backgroundColor'] ?? t.card,
+          backgroundColor: t.enableGlassmorphism ? t.card.withOpacity(t.glassOpacity) : (properties['backgroundColor'] ?? t.card),
           borderColor: properties['borderColor'] ?? t.border,
           borderRadius:
               (properties['borderRadius']?.toDouble() ?? 12.0) * t.radiusScale,
           padding: EdgeInsets.all(
             (properties['padding']?.toDouble() ?? 16.0) * t.spacingScale,
           ),
-          elevation:
+          elevation: t.enableNeumorphism ? 0 : 
               (properties['elevation']?.toDouble() ?? 2.0) * t.shadowIntensity,
           borderWidth: properties['borderWidth']?.toDouble() ?? 1.0,
           width: properties['width']?.toDouble() ?? 300.0,
@@ -67,38 +90,110 @@ class ComponentConfig {
             ),
           ),
         );
+        
+        // Apply visual effects if any are enabled (gradients are app-level only)
+        if (t.enableGlassmorphism || t.enableNeumorphism || t.enableBorderGlow) {
+          return EffectContainer(
+            theme: t,
+            backgroundColor: properties['backgroundColor'] ?? t.card,
+            borderRadius: BorderRadius.circular(
+              (properties['borderRadius']?.toDouble() ?? 12.0) * t.radiusScale,
+            ),
+            padding: EdgeInsets.all(
+              (properties['padding']?.toDouble() ?? 16.0) * t.spacingScale,
+            ),
+            child: SizedBox(
+              width: (properties['width']?.toDouble() ?? 300.0) - 32,
+              height: (properties['height']?.toDouble() ?? 200.0) - 32,
+              child: Center(
+                child: Text(
+                  'Card Content',
+                  style: TextStyle(color: t.cardForeground),
+                ),
+              ),
+            ),
+          );
+        }
+        return cardWidget;
 
       case 'textfield':
-        return CustomTextField(
-          label: properties['label'] ?? 'Email',
-          placeholder: properties['placeholder'] ?? 'Enter your email',
-          size: _getTextFieldSize(properties['size']),
-          backgroundColor: properties['backgroundColor'] ?? t.background,
-          borderColor: properties['borderColor'] ?? t.input,
-          focusedBorderColor: properties['focusedBorderColor'] ?? t.ring,
-          textColor: properties['textColor'] ?? t.foreground,
-          labelColor: properties['labelColor'] ?? t.mutedForeground,
-          borderRadius:
-              (properties['borderRadius']?.toDouble() ?? 8.0) * t.radiusScale,
-          borderWidth: properties['borderWidth']?.toDouble() ?? 1.5,
-          fontSize:
-              (properties['fontSize']?.toDouble() ?? 16.0) * t.fontSizeScale,
-          prefixIcon: properties['prefixIcon'] != 'none'
-              ? _getIcon(properties['prefixIcon'])
-              : null,
+        return wrapWithEffects(
+          CustomTextField(
+            label: properties['label'] ?? 'Email',
+            placeholder: properties['placeholder'] ?? 'Enter your email',
+            size: _getTextFieldSize(properties['size']),
+            backgroundColor: properties['backgroundColor'] ?? t.background,
+            borderColor: properties['borderColor'] ?? t.input,
+            focusedBorderColor: properties['focusedBorderColor'] ?? t.ring,
+            textColor: properties['textColor'] ?? t.foreground,
+            labelColor: properties['labelColor'] ?? t.mutedForeground,
+            borderRadius:
+                (properties['borderRadius']?.toDouble() ?? 8.0) * t.radiusScale,
+            borderWidth: properties['borderWidth']?.toDouble() ?? 1.5,
+            fontSize:
+                (properties['fontSize']?.toDouble() ?? 16.0) * t.fontSizeScale,
+            prefixIcon: properties['prefixIcon'] != 'none'
+                ? _getIcon(properties['prefixIcon'])
+                : null,
+          ),
+          borderRadius: 8.0,
         );
 
       case 'appbar':
-        return CustomAppBar(
-          title: properties['title'] ?? 'My App',
-          size: _getAppBarSize(properties['size']),
-          backgroundColor: properties['backgroundColor'] ?? t.primary,
-          textColor: properties['textColor'] ?? t.primaryForeground,
-          elevation:
-              (properties['elevation']?.toDouble() ?? 4.0) * t.shadowIntensity,
-          fontSize:
-              (properties['fontSize']?.toDouble() ?? 20.0) * t.fontSizeScale,
-          centerTitle: properties['centerTitle'] ?? true,
+        // More realistic app bar with icons
+        return Container(
+          height: 56,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          color: properties['backgroundColor'] ?? t.primary,
+          child: Row(
+            children: [
+              Icon(
+                Icons.menu,
+                color: properties['textColor'] ?? t.primaryForeground,
+                size: 24,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  properties['title'] ?? 'Dashboard',
+                  style: TextStyle(
+                    color: properties['textColor'] ?? t.primaryForeground,
+                    fontSize: (properties['fontSize']?.toDouble() ?? 18.0) * t.fontSizeScale,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              // Notification icon with badge
+              Stack(
+                children: [
+                  Icon(
+                    Icons.notifications_outlined,
+                    color: properties['textColor'] ?? t.primaryForeground,
+                    size: 24,
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: t.primary, width: 1),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 16),
+              Icon(
+                Icons.settings_outlined,
+                color: properties['textColor'] ?? t.primaryForeground,
+                size: 22,
+              ),
+            ],
+          ),
         );
 
       case 'bottomnav':
@@ -108,8 +203,7 @@ class ComponentConfig {
           backgroundColor: t.card,
           selectedItemColor: t.primary,
           unselectedItemColor: t.mutedForeground,
-          elevation:
-              (properties['elevation']?.toDouble() ?? 8.0) * t.shadowIntensity,
+          elevation: 0, // Remove shadow line
           iconSize:
               (properties['iconSize']?.toDouble() ?? 24.0) * t.fontSizeScale,
           fontSize:
@@ -124,11 +218,17 @@ class ComponentConfig {
         );
 
       case 'badge':
-        return CustomBadge(
-          text: properties['text'] ?? 'New',
-          variant: _getBadgeVariant(properties['variant']),
-          backgroundColor: t.primary,
-          foregroundColor: t.primaryForeground,
+        final badgeRadius = 16.0 * t.radiusScale + 2;
+        return wrapWithEffects(
+          CustomBadge(
+            text: properties['text'] ?? 'New',
+            variant: _getBadgeVariant(properties['variant']),
+            backgroundColor: t.primary,
+            foregroundColor: t.primaryForeground,
+            borderRadius: badgeRadius, // Pass to badge component
+          ),
+          borderRadius: badgeRadius,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         );
 
       case 'checkbox':
@@ -161,23 +261,38 @@ class ComponentConfig {
         );
 
       case 'avatar':
+        // Respect theme radiusScale - low values = more square, high values = circular
         return CustomAvatar(
           initials: properties['initials'] ?? 'JD',
           size: _getAvatarSize(properties['size']),
+          borderRadius: t.radiusScale < 0.5 ? 8.0 * t.radiusScale + 4 : null, // null = full circle
         );
 
       case 'alert':
-        return CustomAlert(
-          title: properties['title'] ?? 'Alert',
-          description: properties['description'],
-          variant: _getAlertVariant(properties['variant']),
+        final alertRadius = 8.0 * t.radiusScale + 2;
+        return wrapWithEffects(
+          CustomAlert(
+            title: properties['title'] ?? 'Alert',
+            description: properties['description'],
+            variant: _getAlertVariant(properties['variant']),
+            borderRadius: alertRadius, // Pass to component
+          ),
+          borderRadius: alertRadius,
+          padding: const EdgeInsets.all(12),
         );
 
       case 'divider':
         return const CustomDivider();
 
       case 'chip':
-        return CustomChip(label: properties['label'] ?? 'Chip');
+        final chipRadius = 16.0 * t.radiusScale + 2;
+        return wrapWithEffects(
+          CustomChip(
+            label: properties['label'] ?? 'Chip',
+            borderRadius: chipRadius, // Pass to component
+          ),
+          borderRadius: chipRadius,
+        );
 
       case 'progress':
         return CustomProgress(
@@ -196,17 +311,20 @@ class ComponentConfig {
         );
 
       case 'textarea':
-        return CustomTextarea(
-          label: properties['label'] ?? 'Description',
-          placeholder: properties['placeholder'] ?? 'Enter text...',
-          maxLines: properties['maxLines'] ?? 4,
-          backgroundColor: t.background,
-          borderColor: t.input,
-          focusedBorderColor: t.ring,
-          textColor: t.foreground,
-          labelColor: t.mutedForeground,
-          borderRadius: 8.0 * t.radiusScale,
-          fontSize: 14.0 * t.fontSizeScale,
+        return wrapWithEffects(
+          CustomTextarea(
+            label: properties['label'] ?? 'Description',
+            placeholder: properties['placeholder'] ?? 'Enter text...',
+            maxLines: properties['maxLines'] ?? 4,
+            backgroundColor: t.background,
+            borderColor: t.input,
+            focusedBorderColor: t.ring,
+            textColor: t.foreground,
+            labelColor: t.mutedForeground,
+            borderRadius: 8.0 * t.radiusScale,
+            fontSize: 14.0 * t.fontSizeScale,
+          ),
+          borderRadius: 8.0,
         );
 
       case 'formfield':

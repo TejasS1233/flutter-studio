@@ -27,6 +27,7 @@
 - [Architecture](#architecture-the-missing-layer)
 - [Real-World Example](#real-world-example)
 - [By The Numbers](#by-the-numbers)
+- [10-Second Theming](#10-second-theming)
 - [Available Components](#available-components-40)
 - [Package Mode](#alternative-package-mode-rapid-prototyping)
 - [Repository Structure](#repository-structure)
@@ -77,7 +78,6 @@ Unlike traditional packages, Flutter Studio copies source code directly into you
 | **Code Ownership**  | Code lives in your project | External dependency      |
 | **Customization**   | Modify anything freely     | Limited to exposed props |
 | **Runtime Deps**    | Zero dependencies          | Package adds to bundle   |
-| **Dark Mode**       | Uses your Theme            | Static colors            |
 | **Version Control** | Track component changes    | Package version only     |
 | **Bundle Size**     | Only what you use          | Entire package           |
 | **Future-Proof**    | Delete CLI anytime         | Tied to package updates  |
@@ -158,6 +158,36 @@ class LoginView extends StatelessWidget {
 - **Accessibility First** - WCAG compliant out of the box
 - **Theme System** - 40+ color tokens, typography scales
 - **5 Preset Layouts** - Dashboard, Profile, Feed, Form, Settings
+
+---
+
+## 10-Second Theming
+
+Don't settle for Material Blue. Flutter Studio comes with **12+ professional presets**, or build your own.
+
+| **Default** | **Neo-Brutalism** | **Cyberpunk** | **Bento/iOS** |
+| :---: | :---: | :---: | :---: |
+| <img src="assets/default_theme.png" width="180" /> | <img src="assets/neo_brutalism_theme.png" width="180" /> | <img src="assets/cyber_theme.png" width="180" /> | <img src="assets/ios_theme.png" width="180" /> |
+| *Clean SaaS aesthetic* | *Gumroad/Notion style* | *Dev tools & CLI apps* | *Apple-inspired squircles* |
+
+**Also includes:** Netflix, Spotify, Amazon, YouTube, Instagram, Monochrome, Retro Windows, and more!
+
+### How it works:
+
+1. **Pick a preset** in the [web preview](https://flutterstudio.vercel.app) dropdown
+2. **Customize** colors, typography, spacing, and visual effects  
+3. **Export** → Theme is generated as `colors.dart`, `typography.dart`, `effects.dart`, etc.
+4. **Copy-paste** the generated files into your project's `lib/theme/` folder
+
+```dart
+// Your exported theme (lib/theme/colors.dart)
+class UIColors {
+  static const Color primary = Color(0xFFFFE600);    // Neo-Brutalism yellow
+  static const Color background = Color(0xFFFFFBEB); // Warm white
+  static const Color border = Color(0xFF000000);     // Sharp black borders
+  // ... all your customized colors
+}
+```
 
 ---
 

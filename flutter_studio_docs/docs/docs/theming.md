@@ -10,14 +10,8 @@ Flutter Studio components automatically adapt to your app's theme defined in `Ma
 MaterialApp(
   theme: ThemeData(
     primarySwatch: Colors.blue,
-    brightness: Brightness.light,
     // Components use these theme values
   ),
-  darkTheme: ThemeData(
-    brightness: Brightness.dark,
-    // Components adapt to dark mode
-  ),
-  themeMode: ThemeMode.system,
   home: MyHomePage(),
 )
 ```
@@ -87,51 +81,6 @@ ThemeData(
     Theme.of(context).textTheme,
   ),
 )
-```
-
-## Dark Mode
-
-### Automatic Dark Mode
-
-Components automatically adapt when you define dark theme:
-
-```dart
-MaterialApp(
-  theme: ThemeData.light(),
-  darkTheme: ThemeData.dark(),
-  themeMode: ThemeMode.system, // Follows system preference
-)
-```
-
-### Manual Toggle
-
-```dart
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.light;
-
-  void _toggleTheme() {
-    setState(() {
-      _themeMode = _themeMode == ThemeMode.light
-        ? ThemeMode.dark
-        : ThemeMode.light;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: _themeMode,
-      home: MyHomePage(onToggleTheme: _toggleTheme),
-    );
-  }
-}
 ```
 
 ## Component Variants
@@ -265,9 +214,8 @@ Use the **[Flutter Studio Playground](https://flutterstudio.vercel.app)** to:
 // lib/theme/app_theme.dart
 
 class AppTheme {
-  static ThemeData lightTheme = ThemeData(
+  static ThemeData theme = ThemeData(
     primarySwatch: Colors.purple,
-    brightness: Brightness.light,
 
     colorScheme: ColorScheme.light(
       primary: Color(0xFF6366F1),
@@ -298,11 +246,6 @@ class AppTheme {
         ),
       ),
     ),
-  );
-
-  static ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    // Dark theme values...
   );
 }
 ```

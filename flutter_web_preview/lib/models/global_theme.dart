@@ -55,6 +55,32 @@ class GlobalTheme {
   double lineHeightScale;
   String fontFamily;
 
+  // Visual Effects
+  bool enableGlassmorphism;
+  double glassBlur;
+  double glassOpacity;
+
+  bool enableNeumorphism;
+  double neumorphismIntensity;
+
+  bool enableGradients;
+  Color gradientStart;
+  Color gradientEnd;
+  double gradientAngle;
+
+  bool enableBorderGlow;
+  Color glowColor;
+  double glowIntensity;
+  double glowSpread;
+
+  bool enableHoverAnimations;
+
+  // Neo-Brutalism style
+  double borderWidth;
+  bool enableHardShadow;
+  double hardShadowOffsetX;
+  double hardShadowOffsetY;
+
   GlobalTheme({
     // Primary
     this.primary = const Color(0xFF09090B),
@@ -109,6 +135,32 @@ class GlobalTheme {
     this.fontSizeScale = 1.0,
     this.lineHeightScale = 1.0,
     this.fontFamily = 'Inter',
+
+    // Visual Effects
+    this.enableGlassmorphism = false,
+    this.glassBlur = 10.0,
+    this.glassOpacity = 0.2,
+
+    this.enableNeumorphism = false,
+    this.neumorphismIntensity = 0.5,
+
+    this.enableGradients = false,
+    this.gradientStart = const Color(0xFF6366F1),
+    this.gradientEnd = const Color(0xFF8B5CF6),
+    this.gradientAngle = 135.0,
+
+    this.enableBorderGlow = false,
+    this.glowColor = const Color(0xFF6366F1),
+    this.glowIntensity = 0.5,
+    this.glowSpread = 4.0,
+
+    this.enableHoverAnimations = false,
+
+    // Neo-Brutalism defaults
+    this.borderWidth = 1.0,
+    this.enableHardShadow = false,
+    this.hardShadowOffsetX = 4.0,
+    this.hardShadowOffsetY = 4.0,
   });
 
   GlobalTheme copyWith({
@@ -142,6 +194,26 @@ class GlobalTheme {
     double? fontSizeScale,
     double? lineHeightScale,
     String? fontFamily,
+    // Visual Effects
+    bool? enableGlassmorphism,
+    double? glassBlur,
+    double? glassOpacity,
+    bool? enableNeumorphism,
+    double? neumorphismIntensity,
+    bool? enableGradients,
+    Color? gradientStart,
+    Color? gradientEnd,
+    double? gradientAngle,
+    bool? enableBorderGlow,
+    Color? glowColor,
+    double? glowIntensity,
+    double? glowSpread,
+    bool? enableHoverAnimations,
+    // Neo-Brutalism
+    double? borderWidth,
+    bool? enableHardShadow,
+    double? hardShadowOffsetX,
+    double? hardShadowOffsetY,
   }) {
     return GlobalTheme(
       primary: primary ?? this.primary,
@@ -167,7 +239,7 @@ class GlobalTheme {
       chart1: chart1 ?? this.chart1,
       chart2: chart2 ?? this.chart2,
       chart3: chart3 ?? this.chart3,
-      chart4: chart4 ?? this.chart5,
+      chart4: chart4 ?? this.chart4,
       chart5: chart5 ?? this.chart5,
       radiusScale: radiusScale ?? this.radiusScale,
       spacingScale: spacingScale ?? this.spacingScale,
@@ -175,6 +247,26 @@ class GlobalTheme {
       fontSizeScale: fontSizeScale ?? this.fontSizeScale,
       lineHeightScale: lineHeightScale ?? this.lineHeightScale,
       fontFamily: fontFamily ?? this.fontFamily,
+      // Visual Effects
+      enableGlassmorphism: enableGlassmorphism ?? this.enableGlassmorphism,
+      glassBlur: glassBlur ?? this.glassBlur,
+      glassOpacity: glassOpacity ?? this.glassOpacity,
+      enableNeumorphism: enableNeumorphism ?? this.enableNeumorphism,
+      neumorphismIntensity: neumorphismIntensity ?? this.neumorphismIntensity,
+      enableGradients: enableGradients ?? this.enableGradients,
+      gradientStart: gradientStart ?? this.gradientStart,
+      gradientEnd: gradientEnd ?? this.gradientEnd,
+      gradientAngle: gradientAngle ?? this.gradientAngle,
+      enableBorderGlow: enableBorderGlow ?? this.enableBorderGlow,
+      glowColor: glowColor ?? this.glowColor,
+      glowIntensity: glowIntensity ?? this.glowIntensity,
+      glowSpread: glowSpread ?? this.glowSpread,
+      enableHoverAnimations: enableHoverAnimations ?? this.enableHoverAnimations,
+      // Neo-Brutalism
+      borderWidth: borderWidth ?? this.borderWidth,
+      enableHardShadow: enableHardShadow ?? this.enableHardShadow,
+      hardShadowOffsetX: hardShadowOffsetX ?? this.hardShadowOffsetX,
+      hardShadowOffsetY: hardShadowOffsetY ?? this.hardShadowOffsetY,
     );
   }
 
@@ -200,6 +292,9 @@ class GlobalTheme {
       accentForeground: const Color(0xFFFFFFFF),
       radiusScale: 0.5,
       fontFamily: 'Inter',
+      // Netflix has subtle neumorphism on cards
+      enableNeumorphism: true,
+      neumorphismIntensity: 0.3,
     );
   }
 
@@ -272,8 +367,14 @@ class GlobalTheme {
       accentForeground: const Color(0xFFFFFFFF),
       radiusScale: 1.5,
       fontFamily: 'Montserrat',
+      // Spotify uses gradient backgrounds
+      enableGradients: true,
+      gradientStart: const Color(0xFF1DB954),
+      gradientEnd: const Color(0xFF121212),
+      gradientAngle: 180.0,
     );
   }
+
 
   static GlobalTheme youtube() {
     return GlobalTheme(
@@ -320,6 +421,160 @@ class GlobalTheme {
       accentForeground: const Color(0xFFFFFFFF),
       radiusScale: 1.2,
       fontFamily: 'Poppins',
+    );
+  }
+
+  /// Cyberpunk theme - dark mode with neon accents (dev aesthetic)
+  static GlobalTheme cyberpunk() {
+    return GlobalTheme(
+      primary: const Color(0xFF00FF41), // Matrix/neon green
+      primaryForeground: const Color(0xFF000000),
+      secondary: const Color(0xFFFF00FF), // Neon pink/magenta
+      secondaryForeground: const Color(0xFF000000),
+      background: const Color(0xFF0D0D0D), // Near black
+      foreground: const Color(0xFF00FF41), // Neon green text
+      card: const Color(0xFF1A1A2E), // Dark purple-black
+      cardForeground: const Color(0xFFE0E0E0),
+      muted: const Color(0xFF16213E), // Dark blue
+      mutedForeground: const Color(0xFF8B8B8B),
+      border: const Color(0xFF00FF41).withOpacity(0.3), // Neon border
+      input: const Color(0xFF1A1A2E),
+      ring: const Color(0xFF00FF41),
+      destructive: const Color(0xFFFF0055), // Neon red
+      destructiveForeground: const Color(0xFFFFFFFF),
+      accent: const Color(0xFF00D4FF), // Cyan accent
+      accentForeground: const Color(0xFF000000),
+      chart1: const Color(0xFF00FF41),
+      chart2: const Color(0xFFFF00FF),
+      chart3: const Color(0xFF00D4FF),
+      chart4: const Color(0xFFFFFF00),
+      chart5: const Color(0xFFFF0055),
+      radiusScale: 0.3, // Sharp edges
+      spacingScale: 1.0,
+      shadowIntensity: 0.5,
+      fontFamily: 'Ubuntu', // Monospace-ish
+      // Enable subtle neon glow effect
+      enableBorderGlow: true,
+      glowColor: const Color(0xFF00FF41),
+      glowIntensity: 0.3, // Reduced for subtler effect
+      glowSpread: 4.0,
+    );
+  }
+
+  /// Neo-Brutalism theme - high contrast, thick black borders, hard offset shadows
+  static GlobalTheme neoBrutalism() {
+    return GlobalTheme(
+      primary: const Color(0xFFFFE600), // Bright yellow
+      primaryForeground: const Color(0xFF000000),
+      secondary: const Color(0xFFFF6B6B), // Coral red
+      secondaryForeground: const Color(0xFF000000),
+      background: const Color(0xFFFFFBEB), // Warm white
+      foreground: const Color(0xFF000000),
+      card: const Color(0xFFFFFFFF), // Pure white cards
+      cardForeground: const Color(0xFF000000),
+      muted: const Color(0xFFF5F5F5),
+      mutedForeground: const Color(0xFF666666),
+      border: const Color(0xFF000000), // Solid black borders
+      input: const Color(0xFFFFFFFF),
+      ring: const Color(0xFF000000),
+      destructive: const Color(0xFFFF4444),
+      destructiveForeground: const Color(0xFFFFFFFF),
+      accent: const Color(0xFF00D4FF), // Bright cyan
+      accentForeground: const Color(0xFF000000),
+      chart1: const Color(0xFFFFE600),
+      chart2: const Color(0xFFFF6B6B),
+      chart3: const Color(0xFF00D4FF),
+      chart4: const Color(0xFF9B59B6),
+      chart5: const Color(0xFF2ECC71),
+      radiusScale: 0.0, // Sharp edges - no rounding
+      spacingScale: 1.1,
+      shadowIntensity: 2.0,
+      fontFamily: 'Inter',
+      // Neo-Brutalism specific
+      borderWidth: 3.0, // Thick black borders
+      enableHardShadow: true, // Hard offset shadow behind cards
+      hardShadowOffsetX: 5.0,
+      hardShadowOffsetY: 5.0,
+    );
+  }
+
+  /// Monochrome/Wireframe theme - black and white blueprint look
+  static GlobalTheme monochrome() {
+    return GlobalTheme(
+      primary: const Color(0xFF000000),
+      primaryForeground: const Color(0xFFFFFFFF),
+      secondary: const Color(0xFFFFFFFF),
+      secondaryForeground: const Color(0xFF000000),
+      background: const Color(0xFFFFFFFF),
+      foreground: const Color(0xFF000000),
+      card: const Color(0xFFFFFFFF),
+      cardForeground: const Color(0xFF000000),
+      muted: const Color(0xFFF0F0F0),
+      mutedForeground: const Color(0xFF666666),
+      border: const Color(0xFF000000),
+      input: const Color(0xFFFFFFFF),
+      ring: const Color(0xFF000000),
+      destructive: const Color(0xFF000000),
+      destructiveForeground: const Color(0xFFFFFFFF),
+      accent: const Color(0xFF000000),
+      accentForeground: const Color(0xFFFFFFFF),
+      radiusScale: 0.3,
+      fontFamily: 'Courier New',
+      borderWidth: 2.0,
+    );
+  }
+
+  /// Retro Windows theme - Win95 beveled edges, grey backgrounds
+  static GlobalTheme retroWindows() {
+    return GlobalTheme(
+      primary: const Color(0xFF000080), // Navy blue title bar
+      primaryForeground: const Color(0xFFFFFFFF),
+      secondary: const Color(0xFFC0C0C0), // Silver/grey
+      secondaryForeground: const Color(0xFF000000),
+      background: const Color(0xFFC0C0C0), // Grey desktop
+      foreground: const Color(0xFF000000),
+      card: const Color(0xFFDFDFDF), // Window background
+      cardForeground: const Color(0xFF000000),
+      muted: const Color(0xFFBFBFBF),
+      mutedForeground: const Color(0xFF808080),
+      border: const Color(0xFF808080),
+      input: const Color(0xFFFFFFFF),
+      ring: const Color(0xFF000080),
+      destructive: const Color(0xFFFF0000),
+      destructiveForeground: const Color(0xFFFFFFFF),
+      accent: const Color(0xFF008080), // Teal accent
+      accentForeground: const Color(0xFFFFFFFF),
+      radiusScale: 0.0, // Sharp corners
+      fontFamily: 'Inter', // Fallback to available font
+      borderWidth: 2.0,
+    );
+  }
+
+  /// Bento/Apple-Style theme - squircle cards, soft shadows, iOS look
+  static GlobalTheme bento() {
+    return GlobalTheme(
+      primary: const Color(0xFF007AFF), // iOS blue
+      primaryForeground: const Color(0xFFFFFFFF),
+      secondary: const Color(0xFFF2F2F7), // iOS light grey
+      secondaryForeground: const Color(0xFF000000),
+      background: const Color(0xFFF2F2F7),
+      foreground: const Color(0xFF000000),
+      card: const Color(0xFFFFFFFF),
+      cardForeground: const Color(0xFF000000),
+      muted: const Color(0xFFE5E5EA),
+      mutedForeground: const Color(0xFF8E8E93),
+      border: const Color(0xFFD1D1D6),
+      input: const Color(0xFFFFFFFF),
+      ring: const Color(0xFF007AFF),
+      destructive: const Color(0xFFFF3B30),
+      destructiveForeground: const Color(0xFFFFFFFF),
+      accent: const Color(0xFF34C759), // iOS green
+      accentForeground: const Color(0xFFFFFFFF),
+      radiusScale: 2.5, // Large squircle corners
+      shadowIntensity: 0.3, // Soft subtle shadows
+      fontFamily: 'SF Pro',
+      enableNeumorphism: true,
+      neumorphismIntensity: 0.15, // Very subtle soft shadows
     );
   }
 }

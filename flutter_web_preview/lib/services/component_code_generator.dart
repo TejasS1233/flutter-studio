@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import '../models/global_theme.dart';
 
 class ComponentCodeGenerator {
@@ -212,6 +213,191 @@ class UIShadows {
 ''';
   }
 
+  /// Generate effects.dart theme file with visual effects utilities
+  static String generateEffectsFile(GlobalTheme theme) {
+    final glassBlur = theme.glassBlur;
+    final glassOpacity = theme.glassOpacity;
+    final neumIntensity = theme.neumorphismIntensity;
+    final glowIntensity = theme.glowIntensity;
+    final glowSpread = theme.glowSpread;
+    final gradientAngle = theme.gradientAngle;
+    
+    String colorToHex(Color c) => '0x${c.value.toRadixString(16).padLeft(8, '0').substring(2)}';
+
+    return '''import 'dart:ui';
+import 'dart:math' as math;
+import 'package:flutter/material.dart';
+
+/// UI Effects - Visual effect utilities and decorations
+class UIEffects {
+  // Effect toggle states (set based on your design preferences)
+  static const bool enableGlassmorphism = ${theme.enableGlassmorphism};
+  static const bool enableNeumorphism = ${theme.enableNeumorphism};
+  static const bool enableGradients = ${theme.enableGradients};
+  static const bool enableBorderGlow = ${theme.enableBorderGlow};
+  static const bool enableHoverAnimations = ${theme.enableHoverAnimations};
+
+  // Glassmorphism settings
+  static const double glassBlur = $glassBlur;
+  static const double glassOpacity = $glassOpacity;
+
+  // Neumorphism settings
+  static const double neumorphismIntensity = $neumIntensity;
+
+  // Gradient settings
+  static const Color gradientStart = Color(${colorToHex(theme.gradientStart)});
+  static const Color gradientEnd = Color(${colorToHex(theme.gradientEnd)});
+  static const double gradientAngle = $gradientAngle;
+
+  // Glow settings
+  static const Color glowColor = Color(${colorToHex(theme.glowColor)});
+  static const double glowIntensity = $glowIntensity;
+  static const double glowSpread = $glowSpread;
+
+  /// Get glassmorphism decoration
+  static BoxDecoration glassDecoration({
+    required Color baseColor,
+    double radiusScale = 1.0,
+    Color? borderColor,
+  }) {
+    if (!enableGlassmorphism) {
+      return BoxDecoration(
+        color: baseColor,
+        borderRadius: BorderRadius.circular(12 * radiusScale),
+      );
+    }
+    return BoxDecoration(
+      color: baseColor.withOpacity(glassOpacity),
+      borderRadius: BorderRadius.circular(12 * radiusScale),
+      border: Border.all(
+        color: (borderColor ?? Colors.white).withOpacity(0.2),
+        width: 1.5,
+      ),
+    );
+  }
+
+  /// Get neumorphism decoration
+  static BoxDecoration neumorphismDecoration({
+    required Color baseColor,
+    double radiusScale = 1.0,
+    bool isPressed = false,
+  }) {
+    if (!enableNeumorphism) {
+      return BoxDecoration(
+        color: baseColor,
+        borderRadius: BorderRadius.circular(12 * radiusScale),
+      );
+    }
+
+    final isDark = baseColor.computeLuminance() < 0.5;
+    final lightColor = isDark 
+        ? Colors.white.withOpacity(0.1 * neumorphismIntensity)
+        : Colors.white.withOpacity(0.7 * neumorphismIntensity);
+    final darkColor = isDark
+        ? Colors.black.withOpacity(0.5 * neumorphismIntensity)
+        : Colors.black.withOpacity(0.15 * neumorphismIntensity);
+
+    return BoxDecoration(
+      color: baseColor,
+      borderRadius: BorderRadius.circular(12 * radiusScale),
+      boxShadow: [
+        BoxShadow(
+          color: darkColor,
+          offset: Offset(4 * neumorphismIntensity, 4 * neumorphismIntensity),
+          blurRadius: 8 * neumorphismIntensity,
+        ),
+        BoxShadow(
+          color: lightColor,
+          offset: Offset(-4 * neumorphismIntensity, -4 * neumorphismIntensity),
+          blurRadius: 8 * neumorphismIntensity,
+        ),
+      ],
+    );
+  }
+
+  /// Get gradient decoration
+  static BoxDecoration gradientDecoration({double radiusScale = 1.0}) {
+    if (!enableGradients) {
+      return BoxDecoration(
+        borderRadius: BorderRadius.circular(12 * radiusScale),
+      );
+    }
+
+    final angleRad = gradientAngle * (math.pi / 180);
+    return BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment(-math.cos(angleRad), -math.sin(angleRad)),
+        end: Alignment(math.cos(angleRad), math.sin(angleRad)),
+        colors: [gradientStart, gradientEnd],
+      ),
+      borderRadius: BorderRadius.circular(12 * radiusScale),
+    );
+  }
+
+  /// Get glow shadows
+  static List<BoxShadow> get glowShadows {
+    if (!enableBorderGlow) return [];
+    return [
+      BoxShadow(
+        color: glowColor.withOpacity(glowIntensity),
+        blurRadius: glowSpread * 2,
+        spreadRadius: glowSpread / 2,
+      ),
+    ];
+  }
+}
+
+/// Glass Container Widget
+class GlassContainer extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+  final BorderRadius? borderRadius;
+  final Color? backgroundColor;
+
+  const GlassContainer({
+    super.key,
+    required this.child,
+    this.padding,
+    this.borderRadius,
+    this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bgColor = backgroundColor ?? Theme.of(context).cardColor;
+    final radius = borderRadius ?? BorderRadius.circular(12);
+
+    if (!UIEffects.enableGlassmorphism) {
+      return Container(
+        padding: padding,
+        decoration: BoxDecoration(color: bgColor, borderRadius: radius),
+        child: child,
+      );
+    }
+
+    return ClipRRect(
+      borderRadius: radius,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: UIEffects.glassBlur,
+          sigmaY: UIEffects.glassBlur,
+        ),
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            color: bgColor.withOpacity(UIEffects.glassOpacity),
+            borderRadius: radius,
+            border: Border.all(color: Colors.white.withOpacity(0.3), width: 1.5),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+''';
+  }
+
   /// Get all theme files as a map
   static Map<String, String> generateAllThemeFiles(GlobalTheme theme) {
     return {
@@ -220,6 +406,7 @@ class UIShadows {
       'radius.dart': generateRadiusFile(theme),
       'spacing.dart': generateSpacingFile(theme),
       'shadows.dart': generateShadowsFile(theme),
+      'effects.dart': generateEffectsFile(theme),
     };
   }
 
