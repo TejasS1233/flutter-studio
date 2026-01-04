@@ -165,17 +165,17 @@ class LoginView extends StatelessWidget {
 
 Don't settle for Material Blue. Flutter Studio comes with **12+ professional presets**, or build your own.
 
-| **Default** | **Neo-Brutalism** | **Cyberpunk** | **Bento/iOS** |
-| :---: | :---: | :---: | :---: |
+|                    **Default**                     |                    **Neo-Brutalism**                     |                  **Cyberpunk**                   |                 **Bento/iOS**                  |
+| :------------------------------------------------: | :------------------------------------------------------: | :----------------------------------------------: | :--------------------------------------------: |
 | <img src="assets/default_theme.png" width="180" /> | <img src="assets/neo_brutalism_theme.png" width="180" /> | <img src="assets/cyber_theme.png" width="180" /> | <img src="assets/ios_theme.png" width="180" /> |
-| *Clean SaaS aesthetic* | *Gumroad/Notion style* | *Dev tools & CLI apps* | *Apple-inspired squircles* |
+|               _Clean SaaS aesthetic_               |                  _Gumroad/Notion style_                  |              _Dev tools & CLI apps_              |           _Apple-inspired squircles_           |
 
 **Also includes:** Netflix, Spotify, Amazon, YouTube, Instagram, Monochrome, Retro Windows, and more!
 
 ### How it works:
 
 1. **Pick a preset** in the [web preview](https://flutterstudio.vercel.app) dropdown
-2. **Customize** colors, typography, spacing, and visual effects  
+2. **Customize** colors, typography, spacing, and visual effects
 3. **Export** → Theme is generated as `colors.dart`, `typography.dart`, `effects.dart`, etc.
 4. **Copy-paste** the generated files into your project's `lib/theme/` folder
 
